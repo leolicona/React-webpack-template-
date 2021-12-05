@@ -1,12 +1,13 @@
-const { resolve } = require('path');
 const path = require('path');
-// module.exports es un objeto donde viven nuestras configuraciones
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
 module.exports = {
     entry: './src/index.js',
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'bundle.js'
     },
+    mode: 'production',
     resolve: {
         extensions: ['.js', '.jsx']
     },
@@ -17,10 +18,22 @@ module.exports = {
                 exclude:/node_modules/,
                 use: {
                     loader: 'babel-loader',
-                }
+                },
+            },
+            {
+                test: /\.html$/,
+                use: [
+                    {loader: 'html-loader'}
+                ],
             }
         ]
     },
+    plugins: [
+        new HtmlWebpackPlugin({
+          template: './public/index.html',
+          filename: './index.html'
+        })
+      ],
     devServer: {
         static: {
           directory: path.join(__dirname, 'dist'),
@@ -28,6 +41,4 @@ module.exports = {
         compress: true,
         port: 3006,
       },
-    },
-   
 }
